@@ -2,6 +2,7 @@ package hu.progmasters;
 
 import hu.progmasters.bike_frame_factory.BikeFrameFactory;
 import hu.progmasters.bike_frame_factory.MachineType;
+import hu.progmasters.constant_values.ConstantValues;
 import hu.progmasters.frame.FrameType;
 import hu.progmasters.order.Order;
 
@@ -18,7 +19,7 @@ public class RoDSStar {
 
     long calculateProfitForCurrentOrderList() {
         long totalProfit = 0;
-        LocalDateTime startTime = LocalDateTime.of(2020, 7, 20, 6, 0);
+        LocalDateTime startTime = ConstantValues.productionStartDate;
         long totalTimeInMinutes = 0;
         int overlapTimeInMinutes = 0;
         for (Order order : orders) {
@@ -40,7 +41,7 @@ public class RoDSStar {
         if (startTime.getHour() != 6 || startTime.getMinute() != 0) {
             int minutesLeftToday = ((bikeFrameFactory.getFinishHour() - startTime.getHour()) * 60) + (60 - startTime.getMinute());
             totalTimeInMinutes -= minutesLeftToday;
-            finishTime.plusDays(1);
+            finishTime = finishTime.plusDays(1);
         }
         int minutesWorkedOneDay = bikeFrameFactory.getWorkHours() * 60;
         while (totalTimeInMinutes > 0) {
@@ -48,7 +49,7 @@ public class RoDSStar {
                 totalTimeInMinutes -= minutesWorkedOneDay;
                 lastWorkDayStarted = finishTime;
             }
-            finishTime.plusDays(1);
+            finishTime = finishTime.plusDays(1);
         }
         if (totalTimeInMinutes < 0) {
             finishTime = lastWorkDayStarted.plusMinutes(minutesWorkedOneDay - totalTimeInMinutes);

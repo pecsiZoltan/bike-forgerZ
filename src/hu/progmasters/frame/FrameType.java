@@ -1,10 +1,12 @@
 package hu.progmasters.frame;
 
+import hu.progmasters.constant_values.ConstantValues;
+
 public enum FrameType {
 
-    GYB(5, 10, 8, 5, 12, 10),
-    FB(8, 16, 12, 5, 20, 15),
-    SB(6, 15, 10, 5, 15, 12);
+    GYB(ConstantValues.GYB_CUT_TIME, ConstantValues.GYB_BEND_TIME, ConstantValues.GYB_WELD_TIME, ConstantValues.GYB_TEST_TIME, ConstantValues.GYB_PAINT_TIME, ConstantValues.GYB_PACK_TIME),
+    FB(ConstantValues.FB_CUT_TIME, ConstantValues.FB_BEND_TIME, ConstantValues.FB_WELD_TIME, ConstantValues.FB_TEST_TIME, ConstantValues.FB_PAINT_TIME, ConstantValues.FB_PACK_TIME),
+    SB(ConstantValues.SB_CUT_TIME, ConstantValues.SB_BEND_TIME, ConstantValues.SB_WELD_TIME, ConstantValues.SB_TEST_TIME, ConstantValues.SB_PAINT_TIME, ConstantValues.SB_PACK_TIME);
 
     private final int cutTime;
     private final int bendTime;
