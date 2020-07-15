@@ -1,9 +1,12 @@
 package hu.progmasters;
 
-import hu.progmasters.bikeFrameFactory.BikeFrameFactory;
-import hu.progmasters.bikeFrameFactory.MachineType;
+import hu.progmasters.bike_frame_factory.BikeFrameFactory;
+import hu.progmasters.bike_frame_factory.MachineType;
+import hu.progmasters.frame.FrameType;
 import hu.progmasters.order.Order;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,17 +16,65 @@ public class RoDSStar {
     private final BikeFrameFactory bikeFrameFactory = BikeFrameFactory.getInstance();
     private final List<Order> orders = new ArrayList<>();
 
-    long calculateTotalWorkTimeForOrderInMinutes(Order order) {
+    long calculateProfitForCurrentOrderList() {
+        long totalProfit = 0;
+        LocalDateTime startTime = LocalDateTime.of(2020, 7, 20, 6, 0);
+        long totalTimeInMinutes = 0;
+        int overlapTimeInMinutes = 0;
+        for (Order order : orders) {
+            totalTimeInMinutes += order.getTotalProductionTime() - overlapTimeInMinutes;
+            overlapTimeInMinutes = order.getProductionTimeBeforeBottleneck();
+            LocalDateTime dayFinished = calculateDateFromMinutesPassed(startTime, totalTimeInMinutes);
+            long penalty = 0;
+            if (dayFinished.isAfter(order.getDeadline())) {
+                penalty = (dayFinished.getDayOfYear() - order.getDeadline().getDayOfYear()) * order.getPenaltyPerDay();
+            }
+            totalProfit += order.getQuantity() * order.getProfitPerPiece() - penalty;
+        }
+        return totalProfit;
+    }
+
+    private LocalDateTime calculateDateFromMinutesPassed(LocalDateTime startTime, long totalTimeInMinutes) {
+        LocalDateTime finishTime = startTime;
+        LocalDateTime lastWorkDayStarted = startTime;
+        if (startTime.getHour() != 6 || startTime.getMinute() != 0) {
+            int minutesLeftToday = ((bikeFrameFactory.getFinishHour() - startTime.getHour()) * 60) + (60 - startTime.getMinute());
+            totalTimeInMinutes -= minutesLeftToday;
+            finishTime.plusDays(1);
+        }
+        int minutesWorkedOneDay = bikeFrameFactory.getWorkHours() * 60;
+        while (totalTimeInMinutes > 0) {
+            if (!finishTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !finishTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                totalTimeInMinutes -= minutesWorkedOneDay;
+                lastWorkDayStarted = finishTime;
+            }
+            finishTime.plusDays(1);
+        }
+        if (totalTimeInMinutes < 0) {
+            finishTime = lastWorkDayStarted.plusMinutes(minutesWorkedOneDay - totalTimeInMinutes);
+        }
+        return finishTime;
+    }
+
+    void calculateProductionTimesInMinutes() {
+        for (Order order : orders) {
+            calculateTotalProductionTimeForOrderInMinutes(order);
+        }
+    }
+
+    void calculateTotalProductionTimeForOrderInMinutes(Order order) {
         long totalTime = 0;
         MachineType bottleneckStep = findBottleneckStep(order);
         int bottleneckStepTime = findBottleneckStepTimeByMachineTypeAndOrder(bottleneckStep, order);
         double numberOfMachinesInBottleneck = bikeFrameFactory.getMachinesPerStep().get(bottleneckStep);
-        totalTime += calculateTimeBeforeBottleneck(bottleneckStep, order);
+        int timeBeforeBottleneck = calculateTimeBeforeBottleneck(bottleneckStep, order);
+        order.setProductionTimeBeforeBottleneck(timeBeforeBottleneck);
+        totalTime += timeBeforeBottleneck;
         totalTime +=
                 (long) Math.ceil((double) (bottleneckStepTime * order.getQuantity())
                         / numberOfMachinesInBottleneck);
         totalTime += calculateTimeAfterBottleneck(bottleneckStep, order);
-        return totalTime;
+        order.setTotalProductionTime(totalTime);
     }
 
     MachineType findBottleneckStep(Order order) {
@@ -118,5 +169,9 @@ public class RoDSStar {
         machinesPerStep.replace(MachineType.TESTER, order.getFrameType().getTestTime() / machinesPerStep.get(MachineType.TESTER));
         machinesPerStep.replace(MachineType.PAINTER, order.getFrameType().getPaintTime() / machinesPerStep.get(MachineType.PAINTER));
         machinesPerStep.replace(MachineType.PACKAGER, order.getFrameType().getPackTime() / machinesPerStep.get(MachineType.PACKAGER));
+    }
+
+    private void addOrder(String orderId, FrameType frameType, int quantity, LocalDateTime deadline, int profitPerPiece, int penaltyPerDay) {
+        orders.add(new Order(orderId, frameType, quantity, deadline, profitPerPiece, penaltyPerDay));
     }
 }

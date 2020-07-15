@@ -1,4 +1,4 @@
-package hu.progmasters.bikeFrameFactory;
+package hu.progmasters.bike_frame_factory;
 
 public enum MachineType {
     CUTTER,
@@ -6,7 +6,5 @@ public enum MachineType {
     WELDER,
     TESTER,
     PAINTER,
-    PACKAGER;
-
-
+    PACKAGER
 }

@@ -6,12 +6,15 @@ import hu.progmasters.frame.FrameType;
 import java.time.LocalDateTime;
 
 public class Order {
-    private String orderId;
-    private FrameType frameType;
-    private int quantity;
-    private LocalDateTime deadline;
-    private int profitPerPiece;
-    private int penaltyPerDay;
+    private final String orderId;
+    private final FrameType frameType;
+    private final int quantity;
+    private final LocalDateTime deadline;
+    private final int profitPerPiece;
+    private final int penaltyPerDay;
+
+    private long totalProductionTime;
+    private int productionTimeBeforeBottleneck;
 
     public Order(String orderId, FrameType frameType, int quantity, LocalDateTime deadline, int profitPerPiece, int penaltyPerDay) {
         this.orderId = orderId;
@@ -44,5 +47,21 @@ public class Order {
 
     public int getPenaltyPerDay() {
         return penaltyPerDay;
+    }
+
+    public long getTotalProductionTime() {
+        return totalProductionTime;
+    }
+
+    public void setTotalProductionTime(long totalProductionTime) {
+        this.totalProductionTime = totalProductionTime;
+    }
+
+    public int getProductionTimeBeforeBottleneck() {
+        return productionTimeBeforeBottleneck;
+    }
+
+    public void setProductionTimeBeforeBottleneck(int productionTimeBeforeBottleneck) {
+        this.productionTimeBeforeBottleneck = productionTimeBeforeBottleneck;
     }
 }

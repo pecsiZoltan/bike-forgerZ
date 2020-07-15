@@ -1,4 +1,4 @@
-package hu.progmasters.bikeFrameFactory;
+package hu.progmasters.bike_frame_factory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +8,9 @@ import java.util.Map;
 public class BikeFrameFactory {
 
     private static final BikeFrameFactory instance = new BikeFrameFactory(new int[]{6, 2, 3, 1, 4, 3});
-    private List<Machine> machines = new ArrayList<>();
-    private int workHours;
+    private final List<Machine> machines = new ArrayList<>();
+    private int startHour = 6;
+    private int finishHour = 22;
 
     private BikeFrameFactory(int[] numberOfMachinesPerType) {
         for (int i = 0; i < numberOfMachinesPerType.length; i++) {
@@ -46,12 +47,7 @@ public class BikeFrameFactory {
 
     public Map<MachineType, Double> getMachinesPerStep() {
         Map<MachineType, Double> machinesPerStep = new HashMap<>();
-        machinesPerStep.put(MachineType.CUTTER, 0.0);
-        machinesPerStep.put(MachineType.BENDER, 0.0);
-        machinesPerStep.put(MachineType.WELDER, 0.0);
-        machinesPerStep.put(MachineType.TESTER, 0.0);
-        machinesPerStep.put(MachineType.PAINTER, 0.0);
-        machinesPerStep.put(MachineType.PACKAGER, 0.0);
+        initializeMap(machinesPerStep);
         for (Machine machine : machines) {
             switch (machine.getMachineType()) {
                 case CUTTER:
@@ -80,7 +76,24 @@ public class BikeFrameFactory {
         return machinesPerStep;
     }
 
+    private void initializeMap(Map<MachineType, Double> machinesPerStep) {
+        machinesPerStep.put(MachineType.CUTTER, 0.0);
+        machinesPerStep.put(MachineType.BENDER, 0.0);
+        machinesPerStep.put(MachineType.WELDER, 0.0);
+        machinesPerStep.put(MachineType.TESTER, 0.0);
+        machinesPerStep.put(MachineType.PAINTER, 0.0);
+        machinesPerStep.put(MachineType.PACKAGER, 0.0);
+    }
+
     public int getWorkHours() {
-        return workHours;
+        return finishHour - startHour;
+    }
+
+    public int getStartHour() {
+        return startHour;
+    }
+
+    public int getFinishHour() {
+        return finishHour;
     }
 }

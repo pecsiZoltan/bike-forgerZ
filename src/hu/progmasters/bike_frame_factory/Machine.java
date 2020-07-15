@@ -1,7 +1,7 @@
-package hu.progmasters.bikeFrameFactory;
+package hu.progmasters.bike_frame_factory;
 
 public class Machine {
-    private MachineType machineType;
+    private final MachineType machineType;
 
     public Machine(MachineType machineType) {
         this.machineType = machineType;
