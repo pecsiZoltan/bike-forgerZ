@@ -1,9 +1,9 @@
 package hu.progmasters.bikeFrameFactory;
 
-public class Macine {
+public class Machine {
     private MachineType machineType;
 
-    public Macine(MachineType machineType) {
+    public Machine(MachineType machineType) {
         this.machineType = machineType;
     }
 

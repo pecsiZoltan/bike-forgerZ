@@ -6,6 +6,7 @@ public enum MachineType {
     WELDER,
     TESTER,
     PAINTER,
-    PACKAGER
+    PACKAGER;
+
 
 }

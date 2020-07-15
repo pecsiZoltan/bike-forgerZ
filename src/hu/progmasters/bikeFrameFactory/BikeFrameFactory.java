@@ -8,7 +8,7 @@ import java.util.Map;
 public class BikeFrameFactory {
 
     private static final BikeFrameFactory instance = new BikeFrameFactory(new int[]{6, 2, 3, 1, 4, 3});
-    private List<Macine> machines = new ArrayList<>();
+    private List<Machine> machines = new ArrayList<>();
     private int workHours;
 
     private BikeFrameFactory(int[] numberOfMachinesPerType) {
@@ -16,22 +16,22 @@ public class BikeFrameFactory {
             for (int j = 0; j < numberOfMachinesPerType[i]; j++) {
                 switch (i) {
                     case 0:
-                        machines.add(new Macine(MachineType.CUTTER));
+                        machines.add(new Machine(MachineType.CUTTER));
                         break;
                     case 1:
-                        machines.add(new Macine(MachineType.BENDER));
+                        machines.add(new Machine(MachineType.BENDER));
                         break;
                     case 2:
-                        machines.add(new Macine(MachineType.WELDER));
+                        machines.add(new Machine(MachineType.WELDER));
                         break;
                     case 3:
-                        machines.add(new Macine(MachineType.TESTER));
+                        machines.add(new Machine(MachineType.TESTER));
                         break;
                     case 4:
-                        machines.add(new Macine(MachineType.PAINTER));
+                        machines.add(new Machine(MachineType.PAINTER));
                         break;
                     case 5:
-                        machines.add(new Macine(MachineType.PACKAGER));
+                        machines.add(new Machine(MachineType.PACKAGER));
                         break;
                     default:
                         break;
@@ -52,7 +52,7 @@ public class BikeFrameFactory {
         machinesPerStep.put(MachineType.TESTER, 0.0);
         machinesPerStep.put(MachineType.PAINTER, 0.0);
         machinesPerStep.put(MachineType.PACKAGER, 0.0);
-        for (Macine machine : machines) {
+        for (Machine machine : machines) {
             switch (machine.getMachineType()) {
                 case CUTTER:
                     machinesPerStep.replace(MachineType.CUTTER, machinesPerStep.get(MachineType.CUTTER) + 1);
