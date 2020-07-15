@@ -22,5 +22,27 @@ public class Order {
         this.penaltyPerDay = penaltyPerDay;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
 
+    public FrameType getFrameType() {
+        return frameType;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public LocalDateTime getDeadline() {
+        return deadline;
+    }
+
+    public int getProfitPerPiece() {
+        return profitPerPiece;
+    }
+
+    public int getPenaltyPerDay() {
+        return penaltyPerDay;
+    }
 }

@@ -6,4 +6,8 @@ public class Macine {
     public Macine(MachineType machineType) {
         this.machineType = machineType;
     }
+
+    public MachineType getMachineType() {
+        return machineType;
+    }
 }

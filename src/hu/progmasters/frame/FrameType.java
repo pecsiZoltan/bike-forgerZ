@@ -21,4 +21,28 @@ public enum FrameType {
         this.paintTime = paintTime;
         this.packTime = packTime;
     }
+
+    public int getCutTime() {
+        return cutTime;
+    }
+
+    public int getBendTime() {
+        return bendTime;
+    }
+
+    public int getWeldTime() {
+        return weldTime;
+    }
+
+    public int getTestTime() {
+        return testTime;
+    }
+
+    public int getPaintTime() {
+        return paintTime;
+    }
+
+    public int getPackTime() {
+        return packTime;
+    }
 }
