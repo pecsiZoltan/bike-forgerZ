@@ -57,32 +57,33 @@ public class RoDSStar {
             LocalDateTime dayFinished = calculateDateFromMinutesPassed(startTime, totalTimeInMinutes);
             long penalty = 0;
             if (dayFinished.isAfter(order.getDeadline())) {
-                penalty = (dayFinished.getDayOfYear() - order.getDeadline().getDayOfYear()) * order.getPenaltyPerDay();
+                penalty = (long) (dayFinished.getDayOfYear() - order.getDeadline().getDayOfYear()) * order.getPenaltyPerDay();
             }
             totalProfit += order.getQuantity() * order.getProfitPerPiece() - penalty;
         }
         return totalProfit;
     }
 
-    private LocalDateTime calculateDateFromMinutesPassed(LocalDateTime startTime, long totalTimeInMinutes) {
+    LocalDateTime calculateDateFromMinutesPassed(LocalDateTime startTime, long totalTimeInMinutes) {
         LocalDateTime finishTime = startTime;
-        LocalDateTime lastWorkDayStarted = startTime;
         if (startTime.getHour() != 6 || startTime.getMinute() != 0) {
             int minutesLeftToday = ((bikeFrameFactory.getFinishHour() - startTime.getHour()) * 60) + (60 - startTime.getMinute());
             totalTimeInMinutes -= minutesLeftToday;
+            finishTime = finishTime.minusMinutes(((long) bikeFrameFactory.getWorkHours() * 60) - minutesLeftToday);
             finishTime = finishTime.plusDays(1);
         }
         int minutesWorkedOneDay = bikeFrameFactory.getWorkHours() * 60;
         while (totalTimeInMinutes > 0) {
             if (!finishTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !finishTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                if (totalTimeInMinutes <= bikeFrameFactory.getWorkHours() * 60) {
+                    finishTime = finishTime.plusMinutes(totalTimeInMinutes);
+                    finishTime = finishTime.minusDays(1);
+                }
                 totalTimeInMinutes -= minutesWorkedOneDay;
-                lastWorkDayStarted = finishTime;
             }
             finishTime = finishTime.plusDays(1);
         }
-        if (totalTimeInMinutes < 0) {
-            finishTime = lastWorkDayStarted.plusMinutes(minutesWorkedOneDay - totalTimeInMinutes);
-        }
+
         return finishTime;
     }
 
@@ -192,7 +193,7 @@ public class RoDSStar {
         }
     }
 
-    private void calculateAvgStepTimes(Order order, Map<MachineType, Double> machinesPerStep) {
+    void calculateAvgStepTimes(Order order, Map<MachineType, Double> machinesPerStep) {
         machinesPerStep.replace(MachineType.CUTTER, order.getFrameType().getCutTime() / machinesPerStep.get(MachineType.CUTTER));
         machinesPerStep.replace(MachineType.BENDER, order.getFrameType().getBendTime() / machinesPerStep.get(MachineType.BENDER));
         machinesPerStep.replace(MachineType.WELDER, order.getFrameType().getWeldTime() / machinesPerStep.get(MachineType.WELDER));
