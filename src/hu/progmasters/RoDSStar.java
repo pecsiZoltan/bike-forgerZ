@@ -19,6 +19,9 @@ public class RoDSStar {
     private final List<Order> orders = new ArrayList<>();
 
     public void sortOrdersForMaximumProfit() {
+        // TODO not the final position of this method call,
+        // TODO should be at the end of the method which reads the input file and fills the order list
+        calculateProductionTimesInMinutes();
         Collections.sort(orders);
         long maxProfit = calculateProfitForCurrentOrderList();
         boolean isOptimal = false;

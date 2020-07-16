@@ -1,5 +1,7 @@
 package hu.progmasters.bike_frame_factory;
 
+import hu.progmasters.constant_values.ConstantValues;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,10 +9,16 @@ import java.util.Map;
 
 public class BikeFrameFactory {
 
-    private static final BikeFrameFactory instance = new BikeFrameFactory(new int[]{6, 2, 3, 1, 4, 3});
+    private static final BikeFrameFactory instance = new BikeFrameFactory(new int[]{
+            ConstantValues.NUMBER_OF_CUTTERS,
+            ConstantValues.NUMBER_OF_BENDERS,
+            ConstantValues.NUMBER_OF_WELDERS,
+            ConstantValues.NUMBER_OF_TESTERS,
+            ConstantValues.NUMBER_OF_PAINTERS,
+            ConstantValues.NUMBER_OF_PACKERS});
     private final List<Machine> machines = new ArrayList<>();
-    private static final int START_HOUR = 6;
-    private static final int FINISH_HOUR = 22;
+    private static final int START_HOUR = ConstantValues.MORNING_SHIFT_BEGINS;
+    private static final int FINISH_HOUR = ConstantValues.AFTERNOON_SHIFT_ENDS;
 
     private BikeFrameFactory(int[] numberOfMachinesPerType) {
         for (int i = 0; i < numberOfMachinesPerType.length; i++) {
@@ -72,7 +80,6 @@ public class BikeFrameFactory {
                     break;
             }
         }
-
         return machinesPerStep;
     }
 

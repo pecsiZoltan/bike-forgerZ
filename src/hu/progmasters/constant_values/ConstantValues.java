@@ -26,6 +26,17 @@ public class ConstantValues {
     public static final int SB_PAINT_TIME = 15;
     public static final int SB_PACK_TIME = 12;
 
+    public static final int NUMBER_OF_CUTTERS = 6;
+    public static final int NUMBER_OF_BENDERS = 2;
+    public static final int NUMBER_OF_WELDERS = 3;
+    public static final int NUMBER_OF_TESTERS = 1;
+    public static final int NUMBER_OF_PAINTERS = 4;
+    public static final int NUMBER_OF_PACKERS = 3;
+
+    public static final int MORNING_SHIFT_BEGINS = 6;
+    public static final int AFTERNOON_SHIFT_ENDS = 22;
+
+
     private ConstantValues() {
     }
 
