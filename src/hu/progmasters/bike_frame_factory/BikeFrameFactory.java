@@ -9,8 +9,8 @@ public class BikeFrameFactory {
 
     private static final BikeFrameFactory instance = new BikeFrameFactory(new int[]{6, 2, 3, 1, 4, 3});
     private final List<Machine> machines = new ArrayList<>();
-    private final int startHour = 6;
-    private final int finishHour = 22;
+    private static final int START_HOUR = 6;
+    private static final int FINISH_HOUR = 22;
 
     private BikeFrameFactory(int[] numberOfMachinesPerType) {
         for (int i = 0; i < numberOfMachinesPerType.length; i++) {
@@ -86,14 +86,14 @@ public class BikeFrameFactory {
     }
 
     public int getWorkHours() {
-        return finishHour - startHour;
+        return FINISH_HOUR - START_HOUR;
     }
 
     public int getStartHour() {
-        return startHour;
+        return START_HOUR;
     }
 
     public int getFinishHour() {
-        return finishHour;
+        return FINISH_HOUR;
     }
 }

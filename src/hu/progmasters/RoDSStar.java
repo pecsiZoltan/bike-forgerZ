@@ -9,6 +9,7 @@ import hu.progmasters.order.Order;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,31 @@ public class RoDSStar {
 
     private final BikeFrameFactory bikeFrameFactory = BikeFrameFactory.getInstance();
     private final List<Order> orders = new ArrayList<>();
+
+    public void sortOrdersForMaximumProfit() {
+        Collections.sort(orders);
+        long maxProfit = calculateProfitForCurrentOrderList();
+        boolean isOptimal = false;
+        while (!isOptimal) {
+            int numberOfChanges = 0;
+            for (int i = 0; i < orders.size() - 1; i++) {
+                Order currentOrder = orders.get(i);
+                orders.set(i, orders.get(i + 1));
+                orders.set(i + 1, currentOrder);
+                long currentProfit = calculateProfitForCurrentOrderList();
+                if (maxProfit < currentProfit) {
+                    maxProfit = currentProfit;
+                    numberOfChanges++;
+                } else {
+                    orders.set(i + 1, orders.get(i));
+                    orders.set(i, currentOrder);
+                }
+            }
+            if (numberOfChanges == 0) {
+                isOptimal = true;
+            }
+        }
+    }
 
     long calculateProfitForCurrentOrderList() {
         long totalProfit = 0;
@@ -172,7 +198,7 @@ public class RoDSStar {
         machinesPerStep.replace(MachineType.PACKAGER, order.getFrameType().getPackTime() / machinesPerStep.get(MachineType.PACKAGER));
     }
 
-    private void addOrder(String orderId, FrameType frameType, int quantity, LocalDateTime deadline, int profitPerPiece, int penaltyPerDay) {
+    public void addOrder(String orderId, FrameType frameType, int quantity, LocalDateTime deadline, int profitPerPiece, int penaltyPerDay) {
         orders.add(new Order(orderId, frameType, quantity, deadline, profitPerPiece, penaltyPerDay));
     }
 }

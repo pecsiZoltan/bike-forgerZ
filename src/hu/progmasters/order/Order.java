@@ -5,7 +5,7 @@ import hu.progmasters.frame.FrameType;
 
 import java.time.LocalDateTime;
 
-public class Order {
+public class Order implements Comparable<Order> {
     private final String orderId;
     private final FrameType frameType;
     private final int quantity;
@@ -64,4 +64,10 @@ public class Order {
     public void setProductionTimeBeforeBottleneck(int productionTimeBeforeBottleneck) {
         this.productionTimeBeforeBottleneck = productionTimeBeforeBottleneck;
     }
+
+    @Override
+    public int compareTo(Order o) {
+        return this.getDeadline().compareTo(o.getDeadline());
+    }
+
 }
