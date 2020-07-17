@@ -30,7 +30,7 @@ class RoDSStarTest {
     }
 
     @Test
-    public void testCalculateAvgStepTimes() {
+    void testCalculateAvgStepTimes() {
         Map<MachineType, Double> machines = bikeFrameFactory.getMachinesPerStep();
         roDSStar.calculateAvgStepTimes(
                 new Order("ljwhfg",
@@ -45,7 +45,7 @@ class RoDSStarTest {
     }
 
     @Test
-    public void testFindBottleneckStep() {
+    void testFindBottleneckStep() {
         Assertions.assertEquals(MachineType.BENDER,
                 roDSStar.findBottleneckStep(
                         new Order("ljwhfg",
@@ -57,7 +57,7 @@ class RoDSStarTest {
     }
 
     @Test
-    public void testCalculateTotalProductionTimeForOrderInMinutes_1000SB() {
+    void testCalculateTotalProductionTimeForOrderInMinutes_1000SB() {
         Order order = new Order("ljwhfg",
                 FrameType.SB,
                 1000,
@@ -69,7 +69,7 @@ class RoDSStarTest {
     }
 
     @Test
-    public void testCalculateTotalProductionTimeForOrderInMinutes_6000SB() {
+    void testCalculateTotalProductionTimeForOrderInMinutes_6000SB() {
         Order order = new Order("ljwhfg",
                 FrameType.SB,
                 6000,
@@ -81,7 +81,7 @@ class RoDSStarTest {
     }
 
     @Test
-    public void testCalculateTotalProductionTimeForOrderInMinutes_1000FB() {
+    void testCalculateTotalProductionTimeForOrderInMinutes_1000FB() {
         Order order = new Order("ljwhfg",
                 FrameType.FB,
                 1000,
@@ -94,27 +94,45 @@ class RoDSStarTest {
 
 
     @Test
-    public void testCalculateDateFromMinutesPassed_startAtSix() {
-        Assertions.assertEquals(
-                LocalDateTime.of(2020, 7, 31, 22, 0),
-                roDSStar.calculateDateFromMinutesPassed(
-                        LocalDateTime.of(2020, 7, 20, 6, 0),
-                        9600)
-        );
+    void testCalculateDateFromMinutesPassed_startAtSix() {
+        if (!ConstantValues.WEEKEND_SHIFTS) {
+            Assertions.assertEquals(
+                    LocalDateTime.of(2020, 7, 31, 22, 0),
+                    roDSStar.calculateDateFromMinutesPassed(
+                            LocalDateTime.of(2020, 7, 20, 6, 0),
+                            9600)
+            );
+        } else {
+            Assertions.assertEquals(
+                    LocalDateTime.of(2020, 7, 29, 22, 0),
+                    roDSStar.calculateDateFromMinutesPassed(
+                            LocalDateTime.of(2020, 7, 20, 6, 0),
+                            9600)
+            );
+        }
     }
 
     @Test
-    public void testCalculateDateFromMinutesPassed_startAtTwo() {
-        Assertions.assertEquals(
-                LocalDateTime.of(2020, 8, 3, 14, 0),
-                roDSStar.calculateDateFromMinutesPassed(
-                        LocalDateTime.of(2020, 7, 20, 14, 0),
-                        9600)
-        );
+    void testCalculateDateFromMinutesPassed_startAtTwo() {
+        if (!ConstantValues.WEEKEND_SHIFTS) {
+            Assertions.assertEquals(
+                    LocalDateTime.of(2020, 8, 3, 14, 0),
+                    roDSStar.calculateDateFromMinutesPassed(
+                            LocalDateTime.of(2020, 7, 20, 14, 0),
+                            9600)
+            );
+        } else {
+            Assertions.assertEquals(
+                    LocalDateTime.of(2020, 7, 30, 14, 0),
+                    roDSStar.calculateDateFromMinutesPassed(
+                            LocalDateTime.of(2020, 7, 20, 14, 0),
+                            9600)
+            );
+        }
     }
 
     @Test
-    public void testCalculateProfitForCurrentOrderList() {
+    void testCalculateProfitForCurrentOrderList() {
         roDSStar.addOrder("MEGR001",
                 FrameType.GYB,
                 1000,
@@ -146,11 +164,16 @@ class RoDSStarTest {
                 2000,
                 10000);
         roDSStar.calculateProductionTimesInMinutes();
-        Assertions.assertEquals(8500000, roDSStar.calculateProfitForCurrentOrderList());
+        if (!ConstantValues.WEEKEND_SHIFTS) {
+            Assertions.assertEquals(8500000, roDSStar.calculateProfitForCurrentOrderList());
+        } else {
+            Assertions.assertEquals(10200000, roDSStar.calculateProfitForCurrentOrderList());
+
+        }
     }
 
     @Test
-    public void testSortOrdersForMaximumProfit() {
+    void testSortOrdersForMaximumProfit() {
         roDSStar.addOrder("MEGR001",
                 FrameType.GYB,
                 1000,
@@ -182,7 +205,11 @@ class RoDSStarTest {
                 2000,
                 10000);
         roDSStar.sortOrdersForMaximumProfit();
-        Assertions.assertEquals(10360000, roDSStar.calculateProfitForCurrentOrderList());
+        if (!ConstantValues.WEEKEND_SHIFTS) {
+            Assertions.assertEquals(10360000, roDSStar.calculateProfitForCurrentOrderList());
+        } else {
+            Assertions.assertEquals(11500000, roDSStar.calculateProfitForCurrentOrderList());
+        }
     }
 
 

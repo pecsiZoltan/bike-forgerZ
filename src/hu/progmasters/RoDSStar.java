@@ -27,6 +27,7 @@ public class RoDSStar {
     public void sortOrdersForMaximumProfit() {
         // TODO not the final position of this method call,
         // TODO should be at the end of the method which reads the input file and fills the order list
+        // TODO SOMETHING IS NOT RIGHT WITH FINAL ORDER
         calculateProductionTimesInMinutes();
         Collections.sort(orders);
         long maxProfit = calculateProfitForCurrentOrderList();
@@ -50,6 +51,8 @@ public class RoDSStar {
                 isOptimal = true;
             }
         }
+        System.out.println("max profit: " + maxProfit);
+        orders.stream().map(Order::getOrderId).forEach(System.out::println);
     }
 
     long calculateProfitForCurrentOrderList() {
@@ -58,15 +61,19 @@ public class RoDSStar {
         long totalTimeInMinutes = 0;
         int overlapTimeInMinutes = 0;
         for (Order order : orders) {
+            System.out.println(order.getOrderId() + " start: " + calculateDateFromMinutesPassed(startTime, totalTimeInMinutes));
             totalTimeInMinutes += order.getTotalProductionTime() - overlapTimeInMinutes;
             overlapTimeInMinutes = order.getProductionTimeBeforeBottleneck();
             LocalDateTime dayFinished = calculateDateFromMinutesPassed(startTime, totalTimeInMinutes);
+            System.out.println(order.getOrderId() + " finish: " + dayFinished);
             long penalty = 0;
             if (dayFinished.isAfter(order.getDeadline())) {
                 penalty = (long) (dayFinished.getDayOfYear() - order.getDeadline().getDayOfYear() + 1) * order.getPenaltyPerDay();
             }
             totalProfit += order.getQuantity() * order.getProfitPerPiece() - penalty;
         }
+        System.out.println("Profit: " + totalProfit);
+        System.out.println("=============================");
         return totalProfit;
     }
 
@@ -80,7 +87,8 @@ public class RoDSStar {
         }
         int minutesWorkedOneDay = bikeFrameFactory.getWorkHours() * 60;
         while (totalTimeInMinutes > 0) {
-            if (!finishTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !finishTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+            if ((!finishTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !finishTime.getDayOfWeek().equals(DayOfWeek.SUNDAY))
+                    || ConstantValues.WEEKEND_SHIFTS) {
                 if (totalTimeInMinutes <= bikeFrameFactory.getWorkHours() * 60) {
                     finishTime = finishTime.plusMinutes(totalTimeInMinutes);
                     finishTime = finishTime.minusDays(1);
