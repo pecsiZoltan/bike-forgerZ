@@ -15,7 +15,13 @@ import java.util.Map;
 
 public class RoDSStar {
 
-    private final BikeFrameFactory bikeFrameFactory = BikeFrameFactory.getInstance();
+    private final BikeFrameFactory bikeFrameFactory = new BikeFrameFactory(new int[]{
+            ConstantValues.NUMBER_OF_CUTTERS,
+            ConstantValues.NUMBER_OF_BENDERS,
+            ConstantValues.NUMBER_OF_WELDERS,
+            ConstantValues.NUMBER_OF_TESTERS,
+            ConstantValues.NUMBER_OF_PAINTERS,
+            ConstantValues.NUMBER_OF_PACKERS});
     private final List<Order> orders = new ArrayList<>();
 
     public void sortOrdersForMaximumProfit() {
@@ -57,7 +63,7 @@ public class RoDSStar {
             LocalDateTime dayFinished = calculateDateFromMinutesPassed(startTime, totalTimeInMinutes);
             long penalty = 0;
             if (dayFinished.isAfter(order.getDeadline())) {
-                penalty = (long) (dayFinished.getDayOfYear() - order.getDeadline().getDayOfYear()) * order.getPenaltyPerDay();
+                penalty = (long) (dayFinished.getDayOfYear() - order.getDeadline().getDayOfYear() + 1) * order.getPenaltyPerDay();
             }
             totalProfit += order.getQuantity() * order.getProfitPerPiece() - penalty;
         }
@@ -205,4 +211,5 @@ public class RoDSStar {
     public void addOrder(String orderId, FrameType frameType, int quantity, LocalDateTime deadline, int profitPerPiece, int penaltyPerDay) {
         orders.add(new Order(orderId, frameType, quantity, deadline, profitPerPiece, penaltyPerDay));
     }
+
 }

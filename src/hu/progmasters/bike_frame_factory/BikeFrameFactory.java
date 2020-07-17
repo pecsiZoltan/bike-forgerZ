@@ -9,18 +9,11 @@ import java.util.Map;
 
 public class BikeFrameFactory {
 
-    private static final BikeFrameFactory instance = new BikeFrameFactory(new int[]{
-            ConstantValues.NUMBER_OF_CUTTERS,
-            ConstantValues.NUMBER_OF_BENDERS,
-            ConstantValues.NUMBER_OF_WELDERS,
-            ConstantValues.NUMBER_OF_TESTERS,
-            ConstantValues.NUMBER_OF_PAINTERS,
-            ConstantValues.NUMBER_OF_PACKERS});
     private final List<Machine> machines = new ArrayList<>();
     private static final int START_HOUR = ConstantValues.MORNING_SHIFT_BEGINS;
     private static final int FINISH_HOUR = ConstantValues.AFTERNOON_SHIFT_ENDS;
 
-    private BikeFrameFactory(int[] numberOfMachinesPerType) {
+    public BikeFrameFactory(int[] numberOfMachinesPerType) {
         for (int i = 0; i < numberOfMachinesPerType.length; i++) {
             for (int j = 0; j < numberOfMachinesPerType[i]; j++) {
                 switch (i) {
@@ -49,8 +42,7 @@ public class BikeFrameFactory {
         }
     }
 
-    public static BikeFrameFactory getInstance() {
-        return instance;
+    public void produce() {
     }
 
     public Map<MachineType, Double> getMachinesPerStep() {
