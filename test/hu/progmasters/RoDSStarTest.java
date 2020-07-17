@@ -96,9 +96,9 @@ class RoDSStarTest {
     @Test
     public void testCalculateDateFromMinutesPassed_startAtSix() {
         Assertions.assertEquals(
-                LocalDateTime.of(2020, 07, 31, 22, 0),
+                LocalDateTime.of(2020, 7, 31, 22, 0),
                 roDSStar.calculateDateFromMinutesPassed(
-                        LocalDateTime.of(2020, 07, 20, 6, 0),
+                        LocalDateTime.of(2020, 7, 20, 6, 0),
                         9600)
         );
     }
@@ -108,7 +108,7 @@ class RoDSStarTest {
         Assertions.assertEquals(
                 LocalDateTime.of(2020, 8, 3, 14, 0),
                 roDSStar.calculateDateFromMinutesPassed(
-                        LocalDateTime.of(2020, 07, 20, 14, 0),
+                        LocalDateTime.of(2020, 7, 20, 14, 0),
                         9600)
         );
     }

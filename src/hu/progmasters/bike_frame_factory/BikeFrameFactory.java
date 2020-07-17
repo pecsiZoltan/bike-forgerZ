@@ -1,17 +1,27 @@
 package hu.progmasters.bike_frame_factory;
 
 import hu.progmasters.constant_values.ConstantValues;
+import hu.progmasters.frame.Frame;
+import hu.progmasters.order.Order;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class BikeFrameFactory {
 
+    private static long minuteCounter = 0;
+
+    private static LocalDateTime timer = ConstantValues.productionStartDate;
+
     private final List<Machine> machines = new ArrayList<>();
-    private static final int START_HOUR = ConstantValues.MORNING_SHIFT_BEGINS;
-    private static final int FINISH_HOUR = ConstantValues.AFTERNOON_SHIFT_ENDS;
+
+    private Queue<Frame> toCut = new LinkedList<>();
+    private Queue<Frame> toBend = new LinkedList<>();
+    private Queue<Frame> toWeld = new LinkedList<>();
+    private Queue<Frame> toTest = new LinkedList<>();
+    private Queue<Frame> toPaint = new LinkedList<>();
+    private Queue<Frame> toPackage = new LinkedList<>();
+
 
     public BikeFrameFactory(int[] numberOfMachinesPerType) {
         for (int i = 0; i < numberOfMachinesPerType.length; i++) {
@@ -42,7 +52,18 @@ public class BikeFrameFactory {
         }
     }
 
-    public void produce() {
+    public void produce(List<Order> orders) {
+        createAndSerializeFrames(orders);
+
+
+    }
+
+    void createAndSerializeFrames(List<Order> orders) {
+        for (Order order : orders) {
+            for (int i = 0; i < order.getQuantity(); i++) {
+                toCut.add(new Frame(order));
+            }
+        }
     }
 
     public Map<MachineType, Double> getMachinesPerStep() {
@@ -85,14 +106,14 @@ public class BikeFrameFactory {
     }
 
     public int getWorkHours() {
-        return FINISH_HOUR - START_HOUR;
+        return ConstantValues.AFTERNOON_SHIFT_ENDS - ConstantValues.MORNING_SHIFT_BEGINS;
     }
 
     public int getStartHour() {
-        return START_HOUR;
+        return ConstantValues.MORNING_SHIFT_BEGINS;
     }
 
     public int getFinishHour() {
-        return FINISH_HOUR;
+        return ConstantValues.AFTERNOON_SHIFT_ENDS;
     }
 }
