@@ -15,35 +15,35 @@ public class BikeFrameFactory {
 
     private final List<Machine> machines = new ArrayList<>();
 
-    private Queue<Frame> toCut = new LinkedList<>();
-    private Queue<Frame> toBend = new LinkedList<>();
-    private Queue<Frame> toWeld = new LinkedList<>();
-    private Queue<Frame> toTest = new LinkedList<>();
-    private Queue<Frame> toPaint = new LinkedList<>();
-    private Queue<Frame> toPackage = new LinkedList<>();
-
+    private final Queue<Frame> toCut = new LinkedList<>();
+    private final Queue<Frame> toBend = new LinkedList<>();
+    private final Queue<Frame> toWeld = new LinkedList<>();
+    private final Queue<Frame> toTest = new LinkedList<>();
+    private final Queue<Frame> toPaint = new LinkedList<>();
+    private final Queue<Frame> toPackage = new LinkedList<>();
+    private final Queue<Frame> finished = new LinkedList<>();
 
     public BikeFrameFactory(int[] numberOfMachinesPerType) {
         for (int i = 0; i < numberOfMachinesPerType.length; i++) {
             for (int j = 0; j < numberOfMachinesPerType[i]; j++) {
                 switch (i) {
                     case 0:
-                        machines.add(new Machine(MachineType.CUTTER));
+                        machines.add(new Machine(MachineType.CUTTER, toCut, toBend));
                         break;
                     case 1:
-                        machines.add(new Machine(MachineType.BENDER));
+                        machines.add(new Machine(MachineType.BENDER, toBend, toWeld));
                         break;
                     case 2:
-                        machines.add(new Machine(MachineType.WELDER));
+                        machines.add(new Machine(MachineType.WELDER, toWeld, toTest));
                         break;
                     case 3:
-                        machines.add(new Machine(MachineType.TESTER));
+                        machines.add(new Machine(MachineType.TESTER, toTest, toPaint));
                         break;
                     case 4:
-                        machines.add(new Machine(MachineType.PAINTER));
+                        machines.add(new Machine(MachineType.PAINTER, toPaint, toPackage));
                         break;
                     case 5:
-                        machines.add(new Machine(MachineType.PACKAGER));
+                        machines.add(new Machine(MachineType.PACKAGER, toPackage, finished));
                         break;
                     default:
                         break;

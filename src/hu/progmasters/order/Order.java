@@ -87,4 +87,19 @@ public class Order implements Comparable<Order> {
         return this.getDeadline().compareTo(o.getDeadline());
     }
 
+    public void setStartedAt(LocalDateTime startedAt) {
+        this.startedAt = startedAt;
+    }
+
+    public void setFinishedAt(LocalDateTime finishedAt) {
+        this.finishedAt = finishedAt;
+    }
+
+    public void setStartSerialNumber(int startSerialNumber) {
+        this.startSerialNumber = startSerialNumber;
+    }
+
+    public void setEndSerialNumber(int endSerialNumber) {
+        this.endSerialNumber = endSerialNumber;
+    }
 }
